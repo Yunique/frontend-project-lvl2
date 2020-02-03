@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Get difference between two configuration files",
   "bin": {
-    "gendiff": "dist/bin/gendiff"
+    "gendiff": "dist/bin/gendiff.js"
   },
   "main": "index.js",
   "scripts": {
