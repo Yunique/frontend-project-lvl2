@@ -4,8 +4,8 @@ install:
 publish:
 	npm publish --dry-run
 
-start:
-	npx babel-node src/bin/gendiff.js
+help:
+	npx babel-node src/bin/gendiff.js -h
 
 lint: 
 	npx eslint .
