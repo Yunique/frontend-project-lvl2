@@ -3,12 +3,12 @@ import gendiff from '../src';
 
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 
-test('extractLinks', () => {
+test('getDifference', () => {
   const before = getFixturePath('before.json');
-  const after = getFixturePath('before.json');
+  const after = getFixturePath('after.json');
 
   const result = `{
-  host: hexlet.io
+    host: hexlet.io
   - timeout: 50
   + timeout: 20
   - proxy: 123.234.53.22

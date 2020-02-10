@@ -14,10 +14,10 @@ const compareColls = (firstColl, secondColl) => {
       }
       if (_.has(secondColl, key)) {
         return (firstColl[key] === secondColl[key])
-          ? [...result, `  ${key}: ${secondColl[key]}`]
-          : [...result, `- ${key}: ${firstColl[key]}`, `+ ${key}: ${secondColl[key]}`];
+          ? [...result, `    ${key}: ${secondColl[key]}`]
+          : [...result, `  - ${key}: ${firstColl[key]}`, `  + ${key}: ${secondColl[key]}`];
       }
-      return [...result, `- ${key}: ${firstColl[key]}`];
+      return [...result, `  - ${key}: ${firstColl[key]}`];
     }, [],
   );
 };
