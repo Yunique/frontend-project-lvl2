@@ -5,7 +5,7 @@ import path from 'path';
 
 export default (pathToFile) => {
   const format = path.extname(pathToFile);
-  const data = fs.readFileSync(pathToFile);
+  const data = fs.readFileSync(pathToFile, 'utf-8');
   let parse;
   if (format === '.json') {
     parse = JSON.parse;

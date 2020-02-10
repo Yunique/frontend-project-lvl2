@@ -29,3 +29,12 @@ test('genDiffYAML', () => {
 
   expect(comparsion).toEqual(result);
 });
+
+test('genDiffIni', () => {
+  const previous = getFixturePath('before.ini');
+  const next = getFixturePath('after.ini');
+
+  const comparsion = gendiff(previous, next);
+
+  expect(comparsion).toEqual(result);
+});
