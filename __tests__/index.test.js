@@ -22,10 +22,10 @@ test('genDiffJSON', () => {
 });
 
 test('genDiffYAML', () => {
-  const before = getFixturePath('before.yml');
-  const after = getFixturePath('after.yml');
+  const previous = getFixturePath('before.yml');
+  const next = getFixturePath('after.yml');
 
-  const comparsion = gendiff(before, after);
+  const comparsion = gendiff(previous, next);
 
   expect(comparsion).toEqual(result);
 });
