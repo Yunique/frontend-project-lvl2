@@ -22,8 +22,11 @@ const compareColls = (firstColl, secondColl) => {
   );
 };
 const getDifference = (path1, path2) => {
-  const comparsion = compareColls(fileToObj(getFile(path1)), fileToObj(getFile(path2)));
-  return comparsion.join('\n');
+  const comparsion = compareColls(fileToObj(getFile(path1)), fileToObj(getFile(path2))).join('\n');
+  const result = `{
+    ${comparsion}
+  }`;
+  return result;
 };
 
 export default getDifference;
