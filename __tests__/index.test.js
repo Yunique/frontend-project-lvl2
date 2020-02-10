@@ -8,12 +8,12 @@ test('extractLinks', () => {
   const after = getFixturePath('before.json');
 
   const result = `{
-    host: hexlet.io
-  + timeout: 20
+  host: hexlet.io
   - timeout: 50
+  + timeout: 20
   - proxy: 123.234.53.22
-  + verbose: true
   - follow: false
+  + verbose: true
 }`;
 
   const comparsion = gendiff(before, after);

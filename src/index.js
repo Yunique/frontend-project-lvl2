@@ -14,18 +14,16 @@ const compareColls = (firstColl, secondColl) => {
       }
       if (_.has(secondColl, key)) {
         return (firstColl[key] === secondColl[key])
-          ? [...result, `    ${key}: ${secondColl[key]}`]
-          : [...result, `  + ${key}: ${firstColl[key]}`, `  + ${key}: ${secondColl[key]}`];
+          ? [...result, `  ${key}: ${secondColl[key]}`]
+          : [...result, `- ${key}: ${firstColl[key]}`, `+ ${key}: ${secondColl[key]}`];
       }
-      return [...result, `  - ${key}: ${firstColl[key]}`];
+      return [...result, `- ${key}: ${firstColl[key]}`];
     }, [],
   );
 };
 const getDifference = (path1, path2) => {
   const comparsion = compareColls(fileToObj(getFile(path1)), fileToObj(getFile(path2))).join('\n');
-  const result = `{
-    ${comparsion}
-  }`;
+  const result = `{\n${comparsion}\n}`;
   return result;
 };
 
