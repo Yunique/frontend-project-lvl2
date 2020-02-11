@@ -9,7 +9,7 @@ export default (pathToFile) => {
   let parse;
   if (format === '.json') {
     parse = JSON.parse;
-  } else if (format === '.yml') {
+  } else if (format === '.yml' || format === '.yaml') {
     parse = yaml.safeLoad;
   } else if (format === '.ini') {
     parse = ini.parse;
