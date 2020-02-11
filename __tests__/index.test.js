@@ -1,40 +1,71 @@
 import path from 'path';
-import gendiff from '../src';
+import fs from 'fs';
+import genDiff from '../src';
 
-const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
+const resultFlatFilePath = path.join(__dirname, '/__fixtures__/genDiffResult');
 
-const result = `{
-    host: hexlet.io
-  - timeout: 50
-  + timeout: 20
-  - proxy: 123.234.53.22
-  - follow: false
-  + verbose: true
-}`;
+const testDataFlat = [
+  [
+    'json',
+    {
+      beforeFilePath: path.join(__dirname, '/__fixtures__/before.json'),
+      afterFilePath: path.join(__dirname, '/__fixtures__/after.json'),
+    },
+  ],
+  [
+    'YAML',
+    {
+      beforeFilePath: path.join(__dirname, '/__fixtures__/before.yml'),
+      afterFilePath: path.join(__dirname, '/__fixtures__/after.yml'),
+    },
+  ],
+  [
+    'ini',
+    {
+      beforeFilePath: path.join(__dirname, '/__fixtures__/before.ini'),
+      afterFilePath: path.join(__dirname, '/__fixtures__/after.ini'),
+    },
+  ],
+];
 
-test('genDiffJSON', () => {
-  const before = getFixturePath('before.json');
-  const after = getFixturePath('after.json');
+const resultMultilevelFilePath = path.join(__dirname, '/__fixtures__/genDiffResultMulti');
 
-  const comparsion = gendiff(before, after);
+const testDataMultilevel = [
+  [
+    'json',
+    {
+      beforeFilePath: path.join(__dirname, '/__fixtures__/beforeMulti.json'),
+      afterFilePath: path.join(__dirname, '/__fixtures__/afterMulti.json'),
+    },
+  ],
+  [
+    'YAML',
+    {
+      beforeFilePath: path.join(__dirname, '/__fixtures__/beforeMulti.yml'),
+      afterFilePath: path.join(__dirname, '/__fixtures__/afterMulti.yml'),
+    },
+  ],
+  [
+    'ini',
+    {
+      beforeFilePath: path.join(__dirname, '/__fixtures__/beforeMulti.ini'),
+      afterFilePath: path.join(__dirname, '/__fixtures__/afterMulti.ini'),
+    },
+  ],
+];
 
-  expect(comparsion).toEqual(result);
-});
+test.each(testDataFlat)(
+  'gendiff flat %s files',
+  (format, { beforeFilePath, afterFilePath }) => {
+    expect(genDiff(beforeFilePath, afterFilePath))
+      .toBe(fs.readFileSync(resultFlatFilePath, 'utf8'));
+  },
+);
 
-test('genDiffYAML', () => {
-  const previous = getFixturePath('before.yml');
-  const next = getFixturePath('after.yml');
-
-  const comparsion = gendiff(previous, next);
-
-  expect(comparsion).toEqual(result);
-});
-
-test('genDiffIni', () => {
-  const previous = getFixturePath('before.ini');
-  const next = getFixturePath('after.ini');
-
-  const comparsion = gendiff(previous, next);
-
-  expect(comparsion).toEqual(result);
-});
+test.each(testDataMultilevel)(
+  'gendiff multilevel %s files',
+  (format, { beforeFilePath, afterFilePath }) => {
+    expect(genDiff(beforeFilePath, afterFilePath))
+      .toBe(fs.readFileSync(resultMultilevelFilePath, 'utf8'));
+  },
+);
