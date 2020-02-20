@@ -27,6 +27,11 @@
     }
   - group2: {
         abc: 12345
+	aff: fif
+	french: {
+    	    fif: 3
+    	    boy: so
+        }
     }
   + group3: {
         fee: 100500
