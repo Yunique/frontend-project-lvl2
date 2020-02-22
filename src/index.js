@@ -1,15 +1,19 @@
 import _ from 'lodash';
 import parser from './modules/parsers';
 import makeAST from './modules/makeAST';
-import makeIndent from './utils/makeIndent'
+import makeIndent from './utils/makeIndent';
 
-const stringify = (value, indentValue, acc = []) => {
+const stringify = (value, indentValue) => {
+  const stringifyObject = (obj, subIndentValue) => {
+    const indent = makeIndent(subIndentValue);
+    const properties = _.reduce(obj, (acc, val, key) => (
+      [...acc, `${makeIndent(subIndentValue + 2)}  ${key}: ${stringify(val, subIndentValue + 2)}`]), []);
+    const stringifiedObject = ['{', ...properties, `${indent}}`];
+    return stringifiedObject.join('\n');
+  };
+
   if (_.isObject(value)) {
-    return {
-      _.reduce(value, (subAcc, val, key) => (
-      [...subAcc, '{', `${' '.repeat(indentValue + 2)}  ${key}: ${stringify(val, indentValue, subAcc)}`, `${' '.repeat(indentValue)}}`]
-    ), acc).join('\n')
-      };
+    return stringifyObject(value, indentValue + 2);
   }
   return (_.isString(value) ? `${value.slice(0)}` : value);
 };
@@ -17,6 +21,13 @@ const stringify = (value, indentValue, acc = []) => {
 const iter = (item, indentValue, acc) => {
   const indent = makeIndent(indentValue);
 
+  const {
+    type,
+    nodeName,
+    oldValue,
+    newValue,
+    children,
+  } = item;
   const stringifiedNewValue = stringify(newValue, indentValue);
   const stringifiedOldValue = stringify(oldValue, indentValue);
 
@@ -25,7 +36,7 @@ const iter = (item, indentValue, acc) => {
       return [...acc, `${indent}+ ${nodeName}: ${stringifiedNewValue}`];
     case 'parent':
       return [...acc, `${indent}  ${nodeName}: {`,
-        children.reduce((subAcc, subItem) => iter(subItem, indentValue + 2, subAcc), []).join('\n'),
+        children.reduce((subAcc, subItem) => iter(subItem, indentValue + 4, subAcc), []).join('\n'),
         `${indent}  }`];
     case 'changed':
       return [...acc, `${indent}- ${nodeName}: ${stringifiedOldValue}`,
@@ -39,8 +50,7 @@ const iter = (item, indentValue, acc) => {
 
 const getDifference = (path1, path2) => {
   const ast = makeAST(parser(path1), parser(path2));
-  console.log(ast);
-  const indentNum = 4;
+  const indentNum = 2;
   const reduced = ast.reduce((acc, item) => iter(item, indentNum, acc), []);
   const result = `{\n${reduced.join('\n')}\n}`;
   return result;

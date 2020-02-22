@@ -10,6 +10,20 @@ const config = {
 
 const nodeFuncs = [
   {
+    check: ({ key, firstColl, secondColl }) => (
+      _.isObject(firstColl[key]) && _.isObject(secondColl[key])),
+    makeNode: ({
+      key,
+      firstColl,
+      secondColl,
+      makeAST,
+    }) => ({
+      type: config.parent,
+      nodeName: key,
+      children: makeAST(firstColl[key], secondColl[key]),
+    }),
+  },
+  {
     check: ({ key, firstColl }) => (!_.has(firstColl, key)),
     makeNode: ({ key, secondColl }) => ({
       type: config.added,
@@ -53,15 +67,12 @@ const makeAST = (firstColl, secondColl) => {
 
   return _.reduce(
     keys, (acc, key) => {
-      if (_.isObject(firstColl[key]) && _.isObject(secondColl[key])) {
-        return [...acc, {
-          type: config.parent,
-          nodeName: key,
-          children: makeAST(firstColl[key], secondColl[key]),
-        }];
-      }
-
-      const args = { key, firstColl, secondColl };
+      const args = {
+        key,
+        firstColl,
+        secondColl,
+        makeAST,
+      };
       const type = getType(args);
       const node = type.makeNode(args);
       return [...acc, node];
