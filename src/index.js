@@ -37,7 +37,7 @@ const iter = (item, indentValue, acc) => {
     case 'parent':
       return [...acc, `${indent}  ${nodeName}: {`,
         children.reduce((subAcc, subItem) => iter(subItem, indentValue + 4, subAcc), []).join('\n'),
-        `${indent}  }`];
+        `${makeIndent(indentValue + 2)}}`];
     case 'changed':
       return [...acc, `${indent}- ${nodeName}: ${stringifiedOldValue}`,
         `${indent}+ ${nodeName}: ${stringifiedNewValue}`];
