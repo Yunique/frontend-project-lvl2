@@ -25,5 +25,11 @@ describe.each(extensions)(
       expect(genDiff(beforeFilePath, afterFilePath, 'plain'))
         .toBe(fs.readFileSync(resultFilePath, 'utf8'));
     });
+
+    test('JSON output', () => {
+      const { beforeFilePath, afterFilePath, resultFilePath } = prepareTestData(extension, 'JSON');
+      expect(genDiff(beforeFilePath, afterFilePath, 'JSON'))
+        .toBe(fs.readFileSync(resultFilePath, 'utf8'));
+    });
   },
 );
