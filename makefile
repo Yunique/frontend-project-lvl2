@@ -16,5 +16,5 @@ lint:
 test:
 	npm run test
 
-test with coverage:
+test-coverage:
 	npx jest --coverage
