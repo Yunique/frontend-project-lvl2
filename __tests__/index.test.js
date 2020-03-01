@@ -14,9 +14,9 @@ const extensions = ['json', 'yml', 'ini'];
 describe.each(extensions)(
   'generate difference between %s files',
   (extension) => {
-    test('default output', () => {
-      const { beforeFilePath, afterFilePath, resultFilePath } = prepareTestData(extension, 'default');
-      expect(genDiff(beforeFilePath, afterFilePath, 'default'))
+    test('operanded output', () => {
+      const { beforeFilePath, afterFilePath, resultFilePath } = prepareTestData(extension, 'operanded');
+      expect(genDiff(beforeFilePath, afterFilePath, 'operanded'))
         .toBe(fs.readFileSync(resultFilePath, 'utf8'));
     });
 

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 /* eslint-disable object-curly-newline */
-import makeIndent from '../../utils/makeIndent';
+import makeIndent from '../utils/makeIndent';
 
 const stringify = (value, indentValue) => {
   const stringifyObject = (obj, subIndentValue) => {

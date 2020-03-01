@@ -1,4 +1,4 @@
-import getTreeOutput from './default';
+import getOperandedOutput from './operanded';
 import getPlainOutput from './plain';
 import getJSONOutput from './json';
 
@@ -8,8 +8,10 @@ const choseFormatter = (ast, format) => {
       return getPlainOutput(ast);
     case ('JSON'):
       return getJSONOutput(ast);
+    case ('operanded'):
+      return getOperandedOutput(ast);
     default:
-      return getTreeOutput(ast);
+      throw new Error('wrong format');
   }
 };
 export default choseFormatter;

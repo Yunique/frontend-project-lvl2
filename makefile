@@ -4,10 +4,13 @@ install:
 publish:
 	npm publish --dry-run
 
+build:
+	npm run build --if-present
+
 help:
 	npx babel-node src/bin/gendiff.js -h
 
-lint: 
+lint:
 	npx eslint .
 
 test:

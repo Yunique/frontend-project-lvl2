@@ -1,8 +1,11 @@
-import choseFormatter from './modules/formatters';
-import makeAST from './modules/makeAST';
-import parser from './modules/parsers';
+import choseFormatter from './formatters';
+import makeAST from './makeAST';
+import parse from './parsers';
+import getInfo from './getInfo';
 
 export default (path1, path2, format) => {
-  const ast = makeAST(parser(path1), parser(path2));
+  const firstFileInfo = getInfo(path1);
+  const secondFileInfo = getInfo(path2);
+  const ast = makeAST(parse(firstFileInfo), parse(secondFileInfo));
   return choseFormatter(ast, format);
 };
