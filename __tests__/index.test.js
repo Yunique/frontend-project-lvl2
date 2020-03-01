@@ -2,34 +2,37 @@ import path from 'path';
 import fs from 'fs';
 import genDiff from '../src';
 
-const prepareTestData = (extension, format) => {
+const getOriginalFilesPaths = (extension) => {
   const beforeFilePath = path.join(__dirname, `/__fixtures__/beforeMulti.${extension}`);
   const afterFilePath = path.join(__dirname, `/__fixtures__/afterMulti.${extension}`);
-  const resultFilePath = path.join(__dirname, `/__fixtures__/result${format}`);
-  return { beforeFilePath, afterFilePath, resultFilePath };
+  return { beforeFilePath, afterFilePath };
 };
+
+const getResultFilePath = (format) => path.join(__dirname, `/__fixtures__/result${format}`);
 
 const extensions = ['json', 'yml', 'ini'];
 
 describe.each(extensions)(
   'generate difference between %s files',
   (extension) => {
+    const { beforeFilePath, afterFilePath } = getOriginalFilesPaths(extension);
+
     test('operanded output', () => {
-      const { beforeFilePath, afterFilePath, resultFilePath } = prepareTestData(extension, 'Operanded');
+      const result = getResultFilePath('Operanded');
       expect(genDiff(beforeFilePath, afterFilePath, 'Operanded'))
-        .toBe(fs.readFileSync(resultFilePath, 'utf8'));
+        .toBe(fs.readFileSync(result, 'utf8'));
     });
 
     test('plain output', () => {
-      const { beforeFilePath, afterFilePath, resultFilePath } = prepareTestData(extension, 'Plain');
+      const result = getResultFilePath('Plain');
       expect(genDiff(beforeFilePath, afterFilePath, 'Plain'))
-        .toBe(fs.readFileSync(resultFilePath, 'utf8'));
+        .toBe(fs.readFileSync(result, 'utf8'));
     });
 
     test('JSON output', () => {
-      const { beforeFilePath, afterFilePath, resultFilePath } = prepareTestData(extension, 'JSON');
+      const result = getResultFilePath('JSON');
       expect(genDiff(beforeFilePath, afterFilePath, 'JSON'))
-        .toBe(fs.readFileSync(resultFilePath, 'utf8'));
+        .toBe(fs.readFileSync(result, 'utf8'));
     });
   },
 );
