@@ -1,7 +1,7 @@
 import choseFormatter from './formatters';
 import makeAST from './makeAST';
 import parse from './parsers';
-import getInfo from './getInfo';
+import getInfo from './getInfoAboutFile';
 
 export default (path1, path2, format) => {
   const firstFileInfo = getInfo(path1);
