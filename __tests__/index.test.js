@@ -15,14 +15,14 @@ describe.each(extensions)(
   'generate difference between %s files',
   (extension) => {
     test('operanded output', () => {
-      const { beforeFilePath, afterFilePath, resultFilePath } = prepareTestData(extension, 'operanded');
-      expect(genDiff(beforeFilePath, afterFilePath, 'operanded'))
+      const { beforeFilePath, afterFilePath, resultFilePath } = prepareTestData(extension, 'Operanded');
+      expect(genDiff(beforeFilePath, afterFilePath, 'Operanded'))
         .toBe(fs.readFileSync(resultFilePath, 'utf8'));
     });
 
     test('plain output', () => {
-      const { beforeFilePath, afterFilePath, resultFilePath } = prepareTestData(extension, 'plain');
-      expect(genDiff(beforeFilePath, afterFilePath, 'plain'))
+      const { beforeFilePath, afterFilePath, resultFilePath } = prepareTestData(extension, 'Plain');
+      expect(genDiff(beforeFilePath, afterFilePath, 'Plain'))
         .toBe(fs.readFileSync(resultFilePath, 'utf8'));
     });
 

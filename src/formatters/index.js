@@ -4,11 +4,11 @@ import getJSONOutput from './json';
 
 const choseFormatter = (ast, format) => {
   switch (format) {
-    case ('plain'):
+    case ('Plain'):
       return getPlainOutput(ast);
     case ('JSON'):
       return getJSONOutput(ast);
-    case ('operanded'):
+    case ('Operanded'):
       return getOperandedOutput(ast);
     default:
       throw new Error('wrong format');
