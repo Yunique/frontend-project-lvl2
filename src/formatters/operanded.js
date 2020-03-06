@@ -19,7 +19,6 @@ const stringify = (value, indentValue) => {
 
 const makePropertyOperanded = (item, indentValue, getOperandedOutput) => {
   const indent = makeIndent(indentValue);
-
   const {
     type,
     nodeName,
@@ -27,7 +26,6 @@ const makePropertyOperanded = (item, indentValue, getOperandedOutput) => {
     newValue,
     children,
   } = item;
-
   const stringifiedNewValue = stringify(newValue, indentValue);
   const stringifiedOldValue = stringify(oldValue, indentValue);
 
