@@ -2,10 +2,12 @@ import path from 'path';
 import fs from 'fs';
 import genDiff from '../src';
 
+const getFixturePath = (filename) => path.join(__dirname, '__fixtures__', filename);
+
 const getTestDataPaths = (extension, format) => {
-  const beforeFilePath = path.join(__dirname, '/__fixtures__/', `before.${extension}`);
-  const afterFilePath = path.join(__dirname, '/__fixtures__/', `after.${extension}`);
-  const resultFilePath = path.join(__dirname, '/__fixtures__/', `result${format}`);
+  const beforeFilePath = getFixturePath(`before.${extension}`);
+  const afterFilePath = getFixturePath(`after.${extension}`);
+  const resultFilePath = getFixturePath(`result${format}`);
   return { beforeFilePath, afterFilePath, resultFilePath };
 };
 

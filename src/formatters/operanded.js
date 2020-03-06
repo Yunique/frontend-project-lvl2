@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import _ from 'lodash';
 
 const makeIndent = (indentValue) => ' '.repeat(indentValue);
@@ -6,9 +5,9 @@ const makeIndent = (indentValue) => ' '.repeat(indentValue);
 const stringify = (value, indentValue) => {
   const stringifyObject = (obj, subIndentValue) => {
     const indent = makeIndent(subIndentValue);
-    const properties = _.reduce(obj, (acc, val, key) => (
-      [...acc, `${makeIndent(subIndentValue + 2)}  ${key}: ${stringify(val, subIndentValue + 2)}`]), []);
-    const stringifiedObject = ['{', ...properties, `${indent}}`];
+    const mappedProperties = _.map(obj, (val, key) => (
+      `${makeIndent(subIndentValue + 2)}  ${key}: ${stringify(val, subIndentValue + 2)}`));
+    const stringifiedObject = ['{', ...mappedProperties, `${indent}}`];
     return stringifiedObject.join('\n');
   };
 
@@ -18,37 +17,47 @@ const stringify = (value, indentValue) => {
   return (_.isString(value) ? `${value.slice(0)}` : value);
 };
 
-const iter = (item, indentValue, acc) => {
+const makePropertyOperanded = (item, indentValue, getOperandedOutput) => {
   const indent = makeIndent(indentValue);
 
-  const { type, nodeName, oldValue, newValue, children } = item;
+  const {
+    type,
+    nodeName,
+    oldValue,
+    newValue,
+    children,
+  } = item;
+
   const stringifiedNewValue = stringify(newValue, indentValue);
   const stringifiedOldValue = stringify(oldValue, indentValue);
 
   switch (type) {
     case 'parent':
-      return [...acc, `${indent}  ${nodeName}: {`,
-        children.reduce((subAcc, subItem) => iter(subItem, indentValue + 4, subAcc), []).join('\n'),
+      return [`${indent}  ${nodeName}: {`,
+        getOperandedOutput(children, indentValue + 4, false),
         `${makeIndent(indentValue + 2)}}`];
     case 'added':
-      return [...acc, `${indent}+ ${nodeName}: ${stringifiedNewValue}`];
+      return `${indent}+ ${nodeName}: ${stringifiedNewValue}`;
     case 'changed':
-      return [...acc, `${indent}- ${nodeName}: ${stringifiedOldValue}`,
+      return [`${indent}- ${nodeName}: ${stringifiedOldValue}`,
         `${indent}+ ${nodeName}: ${stringifiedNewValue}`];
     case 'unchanged':
-      return [...acc, `${indent}  ${nodeName}: ${stringifiedOldValue}`];
+      return `${indent}  ${nodeName}: ${stringifiedOldValue}`;
     case 'deleted':
-      return [...acc, `${indent}- ${nodeName}: ${stringifiedOldValue}`];
+      return `${indent}- ${nodeName}: ${stringifiedOldValue}`;
     default:
-      throw new Error('Wrong type');
+      throw new Error(`Unknown type: '${type}'!`);
   }
 };
 
-const getTreeOutput = (ast) => {
-  const indentNum = 2;
-  const reduced = ast.reduce((acc, item) => iter(item, indentNum, acc), []);
-  const result = `{\n${reduced.join('\n')}\n}`;
-  return result;
+const getOperandedOutput = (ast, indentValue = 2, motherNode = true) => {
+  const mapped = ast.map((item) => makePropertyOperanded(item, indentValue, getOperandedOutput));
+  const flattened = _.flatten(mapped);
+  const result = (motherNode)
+    ? ['{', flattened.join('\n'), '}']
+    : flattened;
+
+  return result.join('\n');
 };
 
-export default getTreeOutput;
+export default getOperandedOutput;

@@ -63,10 +63,13 @@ const nodeFuncs = [
 const getType = (element) => _.find(nodeFuncs, ({ check }) => check(element));
 
 const makeAST = (firstColl, secondColl) => {
-  const keys = _.uniq([..._.keys(firstColl), ..._.keys(secondColl)]);
+  const firstCollKeys = _.keys(firstColl);
+  const secondCollKeys = _.keys(secondColl);
+  const allKeys = _.concat(firstCollKeys, secondCollKeys);
+  const uniqKeys = _.uniq(allKeys);
 
-  return _.reduce(
-    keys, (acc, key) => {
+  return uniqKeys.map(
+    (key) => {
       const args = {
         key,
         firstColl,
@@ -75,8 +78,8 @@ const makeAST = (firstColl, secondColl) => {
       };
       const type = getType(args);
       const node = type.makeNode(args);
-      return [...acc, node];
-    }, [],
+      return node;
+    },
   );
 };
 

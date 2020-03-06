@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 import _ from 'lodash';
 
 const stringify = (value) => {
@@ -8,8 +7,14 @@ const stringify = (value) => {
   return (_.isString(value) ? `${value.slice(0)}` : value);
 };
 
-const iter = (item, nodePath, acc) => {
-  const { type, nodeName, oldValue, newValue, children } = item;
+const makePropertyPlain = (property, nodePath, getPlainOutput) => {
+  const {
+    type,
+    nodeName,
+    oldValue,
+    newValue,
+    children,
+  } = property;
 
   const stringifiedNewValue = stringify(newValue);
   const stringifiedOldValue = stringify(oldValue);
@@ -17,25 +22,25 @@ const iter = (item, nodePath, acc) => {
 
   switch (type) {
     case 'parent':
-      return [...acc,
-        ...children.reduce((subAcc, subItem) => iter(subItem, newNodePath, subAcc), [])];
+      return getPlainOutput(children, newNodePath);
     case 'added':
-      return [...acc, `Property ${newNodePath} was added with value: ${stringifiedNewValue}`];
+      return `Property ${newNodePath} was added with value: ${stringifiedNewValue}`;
     case 'changed':
-      return [...acc, `Property ${newNodePath} was changed from ${stringifiedOldValue} to ${stringifiedNewValue}`];
+      return `Property ${newNodePath} was changed from ${stringifiedOldValue} to ${stringifiedNewValue}`;
     case 'deleted':
-      return [...acc, `Property ${newNodePath} was deleted`];
+      return `Property ${newNodePath} was deleted`;
     case 'unchanged':
-      return acc;
+      return null;
     default:
-      throw new Error('Wrong type');
+      throw new Error(`Unknown type: '${type}'!`);
   }
 };
 
-const getTreeOutput = (ast) => {
-  const reduced = ast.reduce((acc, item) => iter(item, '', acc), []);
-  const result = reduced.join('\n');
+const getPlainOutput = (ast, nodePath = '') => {
+  const mapped = ast.map((property) => makePropertyPlain(property, nodePath, getPlainOutput));
+  const filtered = mapped.filter((property) => property);
+  const result = filtered.join('\n');
   return result;
 };
 
-export default getTreeOutput;
+export default getPlainOutput;

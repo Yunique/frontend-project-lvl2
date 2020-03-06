@@ -1,8 +1,9 @@
 import ini from 'ini';
 import yaml from 'js-yaml';
 
-export default ({ format, data }) => {
-  switch (format) {
+export default (fileinfo) => {
+  const { extension, data } = fileinfo;
+  switch (extension) {
     case ('.json'):
       return JSON.parse(data);
     case ('.yml' || '.yaml'):
@@ -10,6 +11,6 @@ export default ({ format, data }) => {
     case ('.ini'):
       return ini.parse(data);
     default:
-      throw new Error('wrong format');
+      throw new Error(`Unknown extension: '${extension}'!`);
   }
 };

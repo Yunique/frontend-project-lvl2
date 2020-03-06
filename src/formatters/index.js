@@ -2,7 +2,7 @@ import getOperandedOutput from './operanded';
 import getPlainOutput from './plain';
 import getJSONOutput from './json';
 
-const choseFormatter = (ast, format) => {
+const formatAST = (ast, format) => {
   switch (format) {
     case ('Plain'):
       return getPlainOutput(ast);
@@ -11,7 +11,7 @@ const choseFormatter = (ast, format) => {
     case ('Operanded'):
       return getOperandedOutput(ast);
     default:
-      throw new Error('wrong format');
+      throw new Error(`Unknown format: '${format}'!`);
   }
 };
-export default choseFormatter;
+export default formatAST;
