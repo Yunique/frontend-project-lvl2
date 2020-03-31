@@ -9,22 +9,22 @@ const makeNumberValueUncaged = (value) => {
     : value;
 };
 
-const getParsedObj = (extension, data) => {
-  switch (extension) {
-    case ('.json'):
+const getParsedObj = (type, data) => {
+  switch (type) {
+    case ('json'):
       return JSON.parse(data);
-    case ('.yml' || '.yaml'):
+    case ('yml' || 'yaml'):
       return yaml.safeLoad(data);
-    case ('.ini'):
+    case ('ini'):
       return ini.parse(data);
     default:
-      throw new Error(`Unknown extension: '${extension}'!`);
+      throw new Error(`Unknown type: '${type}'!`);
   }
 };
 
-export default (dataAndExtension) => {
-  const { extension, data } = dataAndExtension;
-  const parsedObj = getParsedObj(extension, data);
+export default (configInfo) => {
+  const { type, data } = configInfo;
+  const parsedObj = getParsedObj(type, data);
   const objWithUncagedNumbers = _.mapValues(parsedObj, makeNumberValueUncaged);
   return objWithUncagedNumbers;
 };
