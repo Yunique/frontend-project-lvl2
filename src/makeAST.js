@@ -65,10 +65,9 @@ const getType = (element) => _.find(nodeFuncs, ({ check }) => check(element));
 const makeAST = (firstColl, secondColl) => {
   const firstCollKeys = _.keys(firstColl);
   const secondCollKeys = _.keys(secondColl);
-  const allKeys = _.concat(firstCollKeys, secondCollKeys);
-  const uniqKeys = _.uniq(allKeys);
+  const collsUnion = _.union(firstCollKeys, secondCollKeys);
 
-  return uniqKeys.map(
+  return collsUnion.map(
     (key) => {
       const args = {
         key,
