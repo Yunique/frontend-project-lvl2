@@ -17,7 +17,7 @@ const stringify = (value, indentValue) => {
   return (_.isString(value) ? `${value.slice(0)}` : value);
 };
 
-const makePropertyOperanded = (item, indentValue, getOperandedOutput) => {
+const makePropertyOperanded = (item, indentValue, turnASTToStrings) => {
   const indent = makeIndent(indentValue);
   const {
     type,
@@ -32,7 +32,7 @@ const makePropertyOperanded = (item, indentValue, getOperandedOutput) => {
   switch (type) {
     case 'parent':
       return [`${indent}  ${nodeName}: {`,
-        getOperandedOutput(children, indentValue + 4, false),
+        turnASTToStrings(children, indentValue + 4),
         `${makeIndent(indentValue + 2)}}`];
     case 'added':
       return `${indent}+ ${nodeName}: ${stringifiedNewValue}`;
@@ -48,14 +48,15 @@ const makePropertyOperanded = (item, indentValue, getOperandedOutput) => {
   }
 };
 
-const getOperandedOutput = (ast, indentValue = 2, motherNode = true) => {
-  const mapped = ast.map((item) => makePropertyOperanded(item, indentValue, getOperandedOutput));
+const turnASTToStrings = (ast, indentValue = 2) => {
+  const mapped = ast.map((item) => makePropertyOperanded(item, indentValue, turnASTToStrings));
   const flattened = _.flatten(mapped);
-  const result = (motherNode)
-    ? ['{', flattened.join('\n'), '}']
-    : flattened;
+  return flattened.join('\n');
+};
 
-  return result.join('\n');
+const getOperandedOutput = (ast) => {
+  const stringifiedAST = turnASTToStrings(ast);
+  return ['{', stringifiedAST, '}'].join('\n');
 };
 
 export default getOperandedOutput;
