@@ -1,7 +1,14 @@
+import fs from 'fs';
+import path from 'path';
 import formatAST from './formatters';
 import makeAST from './makeAST';
 import parse from './parsers';
-import getInfo from './getInfoAboutConfig';
+
+const getInfo = (pathToFile) => {
+  const type = path.extname(pathToFile).slice(1);
+  const data = fs.readFileSync(pathToFile, 'utf-8');
+  return { type, data };
+};
 
 export default (path1, path2, format) => {
   const firstConfigInfo = getInfo(path1);

@@ -11,11 +11,11 @@ const makeNumberValueUncaged = (value) => {
 
 const getParsedObj = (type, data) => {
   switch (type) {
-    case ('json'):
-      return JSON.parse(data);
-    case ('yml' || 'yaml'):
-      return yaml.safeLoad(data);
-    case ('ini'):
+    case 'json':
+      return _.mapValues(JSON.parse(data), makeNumberValueUncaged);
+    case 'yml' || 'yaml':
+      return _.mapValues(yaml.safeLoad(data), makeNumberValueUncaged);
+    case 'ini':
       return ini.parse(data);
     default:
       throw new Error(`Unknown type: '${type}'!`);
@@ -25,6 +25,5 @@ const getParsedObj = (type, data) => {
 export default (configInfo) => {
   const { type, data } = configInfo;
   const parsedObj = getParsedObj(type, data);
-  const objWithUncagedNumbers = _.mapValues(parsedObj, makeNumberValueUncaged);
-  return objWithUncagedNumbers;
+  return parsedObj;
 };
